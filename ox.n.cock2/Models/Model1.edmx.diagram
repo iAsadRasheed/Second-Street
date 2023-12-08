@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f817e46ef0ea45839b1803e718bf4fd5" Name="Diagram1" ZoomLevel="95">
+        <EntityTypeShape EntityType="Ox.n.CockModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.AspNetRole" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="6.25" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="9" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.AspNetUser" Width="1.5" PointX="3" PointY="9.625" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.Order" Width="1.5" PointX="5.25" PointY="19.875" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.OrderDetail" Width="1.5" PointX="7.5" PointY="20.5" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.Product" Width="1.5" PointX="5.25" PointY="11.5" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.ProductCategory" Width="1.5" PointX="5.25" PointY="16.125" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.ProductClassification" Width="1.5" PointX="7.5" PointY="12.75" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.ProductOrderDetail" Width="1.5" PointX="9.75" PointY="17.125" />
+        <EntityTypeShape EntityType="Ox.n.CockModel.ProductSubCategory" Width="1.5" PointX="10.5" PointY="12.75" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_Order_AspNetUsers" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_Order_AspNetUsers1" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_Product_AspNetUsers" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_Product_AspNetUsers1" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductCategory_AspNetUsers" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductCategory_AspNetUsers1" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductClassification_AspNetUsers" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductClassification_AspNetUsers1" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductSubCategory_AspNetUsers" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductSubCategory_AspNetUsers1" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_OrderDetail_Order" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductOrderDetail_OrderDetail" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_Product_Classification" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_Product_ProductSubCategory" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductOrderDetail_Product" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductClassification_ProductCategory" />
+        <AssociationConnector Association="Ox.n.CockModel.FK_ProductSubCategory_ProductSubCategory" />
+        <AssociationConnector Association="Ox.n.CockModel.AspNetUserRoles" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

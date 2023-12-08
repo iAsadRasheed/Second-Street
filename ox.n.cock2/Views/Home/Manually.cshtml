@@ -1,0 +1,163 @@
+﻿@*@{
+        ViewBag.Title = "Home Page";
+    }*@
+
+<style>
+    #printerDiv iframe {
+        position: absolute;
+        top: -1000px;
+    }
+</style>
+
+<div class="container-fluid">
+    <h4 class="alert alert-success text-center">Second Street Cafe - Place Order </h4>
+    <div class="row form-inline">
+        <div class="col-md-5">
+            <label for="CustomerName:">Customer Name: </label>
+            <input type="text" class="form-control" id="CustomerName">
+        </div>
+        <div class="col-md-5">
+            <label for="OrderInstructions:">Customer Instructions: </label>
+            <input type="text" class="form-control" id="OrderInstructions">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-group">
+                @Html.Label("ProductCategoryId", "Category Name", htmlAttributes: new { })
+                @Html.DropDownList("ProductCategoryId", (IEnumerable<SelectListItem>)ViewBag.ProductCategories, "-- Please Select --", htmlAttributes: new { @class = "form-control" })
+                <small id="ProductCategory-warning" style="color:red;display:none;">* Please select Category</small>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="email">Sub Category:</label>
+                <select class="form-control subCategory-classification" name="ProductSubCategory" id="ProductSubCategory">
+                    <option value="">-- Please Select --</option>
+                </select>
+                <small id="ProductSubCategory-warning" style="color:red;display:none;">* Please select SubCategory</small>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="email">Product Classification:</label>
+                <select class="form-control subCategory-classification" name="ProductClassification" id="ProductClassification">
+                    <option value="">-- Please Select --</option>
+                </select>
+                <small id="ProductClassification-warning" style="color:red;display:none;">* Please select Classification</small>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <div class="form-group">
+                <label for="Price">Price:</label>
+                <input type="number" class="form-control" disabled id="Price">
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <div class="form-group">
+                <label for="NoOfItems">NoOfItems:</label>
+                <input type="number" value="1" min="0" onkeyup="if(value<0) value=0;" class="form-control" id="NoOfItems" name="NoOfItems">
+            </div>
+        </div>
+
+        <div class="col-md-1" style="padding: 0;">
+            <div class="form-group" style="padding-top: 28px;">
+                <input class="form-check-input" type="checkbox" id="IsDiscountAllowed" name="IsDiscountAllowed" value="IsDiscountAllowed">
+                <label class="form-check-label">Discount</label>
+            </div>
+        </div>
+
+        <div class="col-md-1" style="display:none" id="DivDiscountAllowed">
+            <div class="form-group">
+                <label for="Discount">Discount:</label>
+                <input type="number" class="form-control" id="Discount" name="Discount">
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="itemTotalPrice">Total:</label>
+                <input type="number" class="form-control" id="itemTotalPrice" disabled name="itemTotalPrice">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-group" style="padding-top: 28px;">
+                <input class="form-check-input" type="checkbox" id="IsAddingSecondFlavor" name="IsAddingSecondFlavor" value="IsAddingSecondFlavor">
+                <label class="form-check-label" for="IsAddingSecondFlavor">Add Second Flavor</label>
+            </div>
+        </div>
+
+        <div class="col-md-2" style="display:none" id="DivAddingSecondFlavor">
+            <div class="form-group">
+                <label for="Discount">Second Flavor:</label>
+                <select class="form-control" name="ProductSubCategorySecondFlavor" id="ProductSubCategorySecondFlavor">
+                    <option value="">-- Please Select --</option>
+                </select>
+                <small id="ProductSubCategorySecondFlavor-warning" style="color:red;display:none;">* Please select Classification</small>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <div class="form-group" style="padding-top: 20px;">
+                <button type="button" class="btn btn-primary" id="btnAddOrderItem">Add Order Item</button>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Sub Category:</th>
+                <th>Product Classification:</th>
+                <th>Price:</th>
+                <th>No Of Items:</th>
+                <th>Discount:</th>
+                <th>Total:</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="tblOrderList">
+            <tr id="noItemAdded"><td colspan="8" class="text-center m-2 p-3">No item added in order List</td></tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="4">No. Of Items:</th>
+                <th id="NetTotalItems">0</th>
+                <th>Price:</th>
+                <th colspan="2" id="NetTotal">0</th>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="jumbotron">
+        <button onclick="placeOrder()">Place Order</button>
+    </div>
+</div>
+
+<div class="modal fade" id="alertModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title text-danger">ALERT !</b>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body bg-danger">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Ok</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/Manually.js"></script>

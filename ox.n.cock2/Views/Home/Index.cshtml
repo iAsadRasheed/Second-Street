@@ -1,0 +1,156 @@
+﻿@model IEnumerable<ox.n.cock2.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+
+    int cssInnerStyleCounter = 1;
+    var productsModel = Model.OrderBy(p => p.ProductSubCategory.CategoryId).ThenBy(p => p.SubCategoryId).ThenBy(p => p.ClassificationId);
+    var productsModelArray = productsModel.ToArray();
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading ">Menu</div>
+    <div class="panel-body">
+        @foreach (var productCategory in productsModel.GroupBy(p => p.ProductSubCategory.ProductCategory).Select(m => m.Key))
+        {
+            <h4 class="btn btn-@(cssInnerStyleCounter % 4 == 1 ? "primary" : cssInnerStyleCounter % 4 == 2 ? "warning" : cssInnerStyleCounter  % 4 == 3 ? "success" : "info") btn-menu_item" id="@productCategory.Id" style="padding:30px;margin-right:7px">
+                <b>@productCategory.CategoryName</b>
+            </h4>
+
+            cssInnerStyleCounter++;
+        }
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row form-inline">
+            <div class="col-md-5">
+                <label for="CustomerName:">Customer Name: </label>
+                <input type="text" class="form-control" id="CustomerName">
+            </div>
+            <div class="col-md-5">
+                <label for="OrderInstructions:">Customer Instructions: </label>
+                <input type="text" class="form-control" id="OrderInstructions">
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <hr />
+        <div class="form-inline">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Sub Category:</th>
+                        <th>Product Detail:</th>
+                        <th>Price:</th>
+                        <th>Items Count:</th>
+                        <th>Discount:</th>
+                        <th colspan="2">Total:</th>
+                    </tr>
+                </thead>
+                <tbody id="tblOrderList">
+                    <tr id="noItemAdded"><td colspan="8" class="text-center m-2 p-3">No item added in order List</td></tr>
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-3">
+                    <b>No. of Items: <span id="GrossTotalItems">0</span></b>
+                </div>
+                <div class="col-md-3">
+                    <b> Price: <span id="GrossTotal">0</span></b>
+                </div>
+            </div>
+
+            <hr style="margin:8px" />
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="btn-group" id="deliveryType" style="border:1.8px solid green; border-radius:6px">
+                        <button type="button" class="btn">Dine In</button>
+                        <button type="button" class="btn">Take Away</button>
+                        <button type="button" class="btn btn-success">Delivery</button>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <b>
+                                Discount:
+                                <input class="form-control" id="isGrossDiscountAllowed" type="checkbox" style="width: 17px;padding-top: 0;margin-top: 0;" />
+                                <input id="GrossDiscountAllowed" type="number" value="0" class="form-control" min="0" onkeyup="if(value<0) value=0;" style="visibility:hidden;width:100px;" />
+                            </b>
+                        </div>
+                    </div>
+                    <hr style="margin-top:8px;margin-bottom:8px;" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <b>
+                                Net Total: <span id="NetTotal">0</span>
+                            </b>
+                        </div>
+                    </div>
+                    <hr style="margin-top:8px;margin-bottom:8px;" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary" onclick="placeOrder()">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="row">
+                <div class="col-md-9">
+                </div>
+                <div class="col-md-3">
+                    <b> Net Total: <span id="NetTotal">0</span></b>
+                </div>
+            </div>
+            <hr style="margin:8px" />
+
+            <div class="row">
+                <div class="col-md-9">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary" onclick="placeOrder()">Place Order</button>
+                </div>
+            </div>*@
+
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        @{
+            Html.RenderAction("RecentOrders", "Order");
+        }
+    </div>
+</div>
+
+<div id="productsByCategoryModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="model-Body">
+            </div>
+            <div class="modal-footer">
+                <div class="form-inline">
+                    <div class="">
+                        <b> Number of Items:</b>
+                        <input id="numberOfItems" type="number" value="1" min="1" onkeyup="if(value<0) value=0;" class="form-control" style="width:70px;margin-right: 10px" />
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/Home.Index.js"></script>

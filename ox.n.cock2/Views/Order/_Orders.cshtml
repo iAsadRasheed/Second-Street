@@ -1,0 +1,95 @@
+﻿@model IEnumerable<ox.n.cock2.Models.OrdersByDatesVM>
+
+@{
+    ViewBag.Title = "OrderList";
+}
+
+<table class="table" id="tblOrders">
+    <tr>
+        <th>
+            Order Detail
+        </th>
+        <th>
+            Items Count
+        </th>
+        <th>
+            Net Total
+        </th>
+        <th>
+            Discount
+        </th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var orderGroup in Model)
+    {
+        <tr class="group-header">
+            <th colspan="6" class="alert alert-danger text-center">
+                @orderGroup.OrderDate.ToString("dd MMM yyyy")
+            </th>
+        </tr>
+
+        foreach (var item in orderGroup.OrdersListVM)
+        {
+            <tr id="@item.OrderKey">
+                <td>
+                    @Html.ActionLink(item.OrderKey, "Details", new { id = item.OrderKey })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoOfItems)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NetTotal)
+                </td>
+                <td>
+                    @if (item.Discount > 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.Discount)
+                    }
+                </td>
+                <td>
+                    <button class="btn btnPaidUnpaid btn-xs btn-@(item.IsPaid ? "success" :"info")" onclick="updateOrderStatus('@item.OrderKey')">@(item.IsPaid ? "Paid" : "Un Paid")</button>
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-@(item.IsDeleted ? "danger" :"success")"> @(item.IsDeleted ? "Deleted" : "Delete")</button>
+                </td>
+            </tr>
+        }
+    }
+
+    <tr>
+        <th>
+            @Model.SelectMany(m => m.OrdersListVM.Where(o => !o.IsDeleted)).Count()
+        </th>
+        <th>
+            @Model.SelectMany(m => m.OrdersListVM.Where(o => !o.IsDeleted)).Sum(m => m.NoOfItems)
+        </th>
+        <th>
+            @Model.SelectMany(m => m.OrdersListVM.Where(o => !o.IsDeleted)).Sum(m => m.NetTotal)
+        </th>
+        <th>
+            @Model.SelectMany(m => m.OrdersListVM.Where(o => !o.IsDeleted)).Sum(m => m.Discount)
+        </th>
+        <th></th>
+        <th></th>
+    </tr>
+</table>
+
+<div class="modal fade" id="PaidStatusConfirmationModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title text-primary">Update Paid Status</b>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body bg-success">
+                Are you sure you want to update <b id="PaidStatusConfirmationText"></b> status.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Ok</button>
+            </div>
+
+        </div>
+    </div>
+</div>

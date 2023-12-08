@@ -1,0 +1,96 @@
+﻿@model IEnumerable<ox.n.cock2.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+
+    int innerStyleCounter = 0;
+    int productCategoryCounter = 0;
+    int cssStyleCounter = 1;
+    int cssInnerStyleCounter = 1;
+    var prevProductCategoryName = "";
+    var orderedModel = Model.OrderBy(p => p.ProductSubCategory.CategoryId).ThenBy(p => p.SubCategoryId).ThenBy(p => p.ClassificationId);
+}
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    @foreach (var productGroup in orderedModel.ToList().GroupBy(m => m.ProductSubCategory.SubCategoryName))
+                    {
+                        if (orderedModel.Count() > productCategoryCounter && prevProductCategoryName != orderedModel.ToArray()[productCategoryCounter].ProductSubCategory.ProductCategory.CategoryName)
+                        {
+                            prevProductCategoryName = orderedModel.ToArray()[productCategoryCounter].ProductSubCategory.ProductCategory.CategoryName;
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <b>@prevProductCategoryName</b>
+                                </td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="@(cssStyleCounter % 4 == 1 || cssStyleCounter == 5 ? "panel-warning" : cssStyleCounter == 2 || cssStyleCounter == 6? "panel-default" : cssStyleCounter == 3 || cssStyleCounter == 7 ? "panel-success" : "panel-info")">
+                                            <div class="panel-heading"><b> @productGroup.Key </b></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            @{
+                                                cssInnerStyleCounter = 1;
+                                                foreach (var product in productGroup)
+                                                {
+                                                    var bb = orderedModel.Where(p => p.ProductSubCategory.CategoryId == product.ProductSubCategory.CategoryId).ToList().GroupBy(m => m.SubCategoryId);
+                                                    var key = bb.OrderByDescending(g => g.Count()).FirstOrDefault().Key;
+                                                    var productsByCurrentGroup = orderedModel.Where(p => p.SubCategoryId == key).ToList();
+
+                                                    foreach (var item in productsByCurrentGroup)
+                                                    {
+                                                        if (product.ClassificationId == item.ClassificationId)
+                                                        {
+                                                            <div class="col-md-3">
+                                                                <button type="button" onclick="getDetail(@product.Id)" class="col-md-12 btn btn-@(cssInnerStyleCounter == 1 ? "primary" : cssInnerStyleCounter == 2 ? "basic" : cssInnerStyleCounter == 3 ? "success" : "info")"><b> @(product.ProductClassification != null ? product.ProductClassification.ClassificationName : "") </b></button>
+                                                            </div>
+
+                                                            cssInnerStyleCounter++;
+                                                            break;
+                                                        }
+                                                        else if (product.ClassificationId > item.ClassificationId && !productGroup.Any(p => p.ClassificationId == item.ClassificationId))
+                                                        {
+                                                            <div class="col-md-3"></div>
+
+                                                            cssInnerStyleCounter++;
+                                                        }
+                                                    }
+
+                                                    innerStyleCounter++;
+                                                    productCategoryCounter++;
+                                                }
+
+                                                innerStyleCounter = 0;
+                                                cssStyleCounter++;
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

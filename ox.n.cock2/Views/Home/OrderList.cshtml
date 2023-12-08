@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ox.n.cock2.Models.OrderVM>
+
+@{
+    ViewBag.Title = "OrderList";
+}
+
+<h2>OrderList</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderKey)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalItems)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GrandTotal)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderKey)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalItems)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GrandTotal)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.OrderKey }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.OrderKey })
+            </td>
+        </tr>
+    }
+
+    <tr>
+        <th>
+            
+        </th>
+        <th>
+            @Model.Sum(m => m.TotalItems)
+        </th>
+        <th>
+            @Model.Sum(m => m.GrandTotal)
+        </th>
+        <th></th>
+    </tr>
+
+</table>

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<ox.n.cock2.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<hr />
+<h5>Product</h5>
+<hr />
+
+<p>
+    @Html.ActionLink("Add New", "Create")
+</p>
+<table class="table table-hover table-bordered">
+    <tr class="alert alert-success">
+        <th>
+            Category Name
+        </th>
+        <th>
+            Sub Category Name
+        </th>
+        <th>
+            Classification Name
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            Discount Allowed
+        </th>
+        <th>
+            Product Details
+        </th>
+        <th>
+            Updated Date
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.AspNetUser.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AspNetUser1.Email)
+            </th>*@
+        <th></th>
+    </tr>
+
+    @foreach (var group in Model.GroupBy(m => m.ProductSubCategory.SubCategoryName))
+    {
+        <tr class="group-header">
+            <th colspan="9" class="alert alert-danger text-center">
+                @group.Key
+            </th>
+        </tr>
+        foreach (var item in group)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.ProductSubCategory.ProductCategory.CategoryName, "Details", new { id = item.Id })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductSubCategory.SubCategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductClassification.ClassificationName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountAllowed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductDetails)
+                </td>
+                <td>
+                    @if (item.UpdatedDate is null)
+                    {
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.UpdatedDate)
+                    }
+                </td>
+
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.AspNetUser.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AspNetUser1.Email)
+                    </td>*@
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    }
+</table>

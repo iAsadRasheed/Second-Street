@@ -1,0 +1,119 @@
+﻿@model ox.n.cock2.Models.Product
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    <h5>Product</h5>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label("ProductCategoryId", "Category Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("ProductCategoryId", (IEnumerable<SelectListItem>)ViewBag.ProductCategories, "-- Please Select --", htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("SubCategoryId", "Sub Category Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="form-control" name="SubCategoryId" id="SubCategoryId">
+                <option value="">-- Please Select --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ClassificationId, "Classification Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <select class="form-control" name="ClassificationId" id="ClassificationId">
+                <option value="">-- Please Select --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ProductDetails, "Product Details", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ProductDetails, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ProductDetails, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.DiscountAllowed, "Discount Allowed", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.DiscountAllowed, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DiscountAllowed, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+
+    $("#ProductCategoryId").change(function () {
+        var subCategoryDD = '<option value="">- - Please Select - -</option>';
+        var productClassificationsDD = '<option value="">- - Please Select - -</option>';
+        $.ajax({
+            url: '@Url.Action("GetProductCategoryDropdown", "Home")',
+            type: 'Get',
+            data: { categoryId: $(this).find(":selected").val() },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+                if (result.success == false) {
+                    alert("product Record Not found.");
+                }
+                else
+                {
+                    var subCategories = result.subCategories;
+                    if (subCategories.length > 0) {
+                        $.each(subCategories, function (index, item) {
+                            subCategoryDD += '<option value="' + item.Value + '">' + item.Text + '</option>';
+                        });
+                    }
+                    $('#SubCategoryId').html(subCategoryDD);
+
+                    var productClassifications = result.productClassifications;
+                    if (productClassifications.length > 0) {
+                        $.each(productClassifications, function (index, item) {
+                            productClassificationsDD += '<option value="' + item.Value + '">' + item.Text + '</option>';
+                        });
+                    }
+                    $('#ClassificationId').html(productClassificationsDD);
+                }
+            },
+            error: function (xhr, status, err) {
+                alert('Error: ' + err);
+            }
+        });
+        return false;
+    });
+</script>

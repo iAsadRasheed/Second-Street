@@ -1,0 +1,92 @@
+﻿@model IEnumerable<ox.n.cock2.Models.Product>
+
+@{
+    var productCategoryCounter = 0;
+    var prevProductCategoryName = "";
+
+    int cssInnerStyleCounter;
+    int cssStyleCounter = 0;
+
+    var sortedProductList = Model.OrderBy(p => p.ProductSubCategory.SubCategoryName).ThenBy(p => p.ClassificationId);
+    var sortedProductArray = sortedProductList.ToArray();
+}
+
+<div class="cantainer">
+    <table class="table" id="menuItems">
+        @foreach (var productsGroupByCategory in sortedProductList.Where(p => p.ClassificationId != null).GroupBy(g => g.ProductSubCategory.SubCategoryName))
+        {
+            if (sortedProductList.Count() > productCategoryCounter)
+            {
+                if (prevProductCategoryName != sortedProductArray[productCategoryCounter].ProductSubCategory.ProductCategory.CategoryName)
+                {
+                    prevProductCategoryName = sortedProductArray[productCategoryCounter].ProductSubCategory.ProductCategory.CategoryName;
+                    <tr>
+                        <td colspan="5" class="text-center"><b>@prevProductCategoryName</b></td>
+                    </tr>
+                }
+            }
+
+            <tr class="prevProductCategoryName">
+                <td>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="@(cssStyleCounter % 4 == 0 ? "panel-warning" : cssStyleCounter % 4 == 1 ? "panel-danger" : cssStyleCounter % 4 == 2 ? "panel-success" : "panel-default")">
+                                <div class="panel-heading"><b> @productsGroupByCategory.Key </b></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="row">
+
+                                @{
+                                    cssInnerStyleCounter = 0;
+                                    foreach (var product in productsGroupByCategory.GroupBy(p => p.ClassificationId))
+                                    {
+                                        <div class="col-md-3" style="padding:1px">
+                                            @foreach (var item in product)
+                                            {
+                                                <button type="button" onclick="getDetail(@item.Id)" style="margin-bottom:1px;" class="col-md-12 btn btn-@(cssInnerStyleCounter % 4 == 0 ? "primary" : cssInnerStyleCounter % 4  == 1 ? "success" : cssInnerStyleCounter % 4  == 2 ? "danger" : "info")"><b> @item.ProductClassification.ClassificationName </b></button>
+                                            }
+                                        </div>
+
+                                        cssInnerStyleCounter++; 
+                                        productCategoryCounter++;
+                                    }
+
+                                    cssStyleCounter++;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+
+
+        @foreach (var productGroup in sortedProductList.Where(p => p.ClassificationId == null))
+        {
+            if (!sortedProductList.Any(p => p.ClassificationId != null) && sortedProductList.Count() > productCategoryCounter)
+            {
+                if (prevProductCategoryName != sortedProductArray[productCategoryCounter].ProductSubCategory.ProductCategory.CategoryName)
+                {
+                    prevProductCategoryName = sortedProductArray[productCategoryCounter].ProductSubCategory.ProductCategory.CategoryName;
+                    <tr>
+                        <td colspan="5" class="text-center"><b>@prevProductCategoryName</b></td>
+                    </tr>
+                }
+            }
+
+            cssInnerStyleCounter = 0;
+
+            <tr class="prevProductCategoryName">
+                <td style="padding-left: 70px; padding-right: 70px;">
+                    <button style="padding-left: 50px; padding-right: 50px;" class="btn btn-@(cssInnerStyleCounter % 4 == 0 ? "primary" : cssInnerStyleCounter % 4 == 1 ? "basic" : cssInnerStyleCounter % 4 == 2 ? "success" : "info")" type="button" onclick="getDetail(@productGroup.Id)">
+                        @productGroup.ProductSubCategory.SubCategoryName @productGroup.ProductDetails
+                    </button>
+                </td>
+            </tr>
+
+            cssInnerStyleCounter++;
+        }
+    </table>
+</div>

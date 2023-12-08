@@ -1,0 +1,57 @@
+﻿@model ox.n.cock2.Models.ProductCategory
+
+@{
+    ViewBag.Title = "Detail";
+}
+
+<div>
+    <hr />
+    <h5>Product Category</h5>
+    <hr />
+    <table class="table table-hover table-striped">
+        <tr>
+            <th>
+                Category Name
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.CategoryName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Created By
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.AspNetUser.Email)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Created Date
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.CreatedDate)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Updated By
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.AspNetUser1.Email)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Updated Date
+            </th>
+            <td>
+                @Html.DisplayFor(model => model.UpdatedDate)
+            </td>
+        </tr>
+    </table>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>

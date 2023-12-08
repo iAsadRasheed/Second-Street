@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ox.n.cock2.Models.ProductClassification>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h5>Product Classification</h5>
+<hr/>
+
+<p>
+    @Html.ActionLink("Add New", "Create")
+</p>
+<table class="table">
+    <tr class="alert alert-success">
+        <th>
+            @Html.DisplayNameFor(model => model.ClassificationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductCategory.CategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpdatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AspNetUser.Email)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var group in Model.GroupBy(m => m.ProductCategory.CategoryName))
+    {
+        <tr class="group-header ">
+            <th colspan="7" class="alert alert-danger text-center">
+                @group.Key
+            </th>
+        </tr>
+        foreach (var item in group)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.ClassificationName, "Details", new { id = item.Id })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCategory.CategoryName)
+                </td>
+                <td>
+                    @if (item.UpdatedDate is null)
+                    {
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.UpdatedDate)
+                    }
+                </td>
+                <td>
+                    @if (item.AspNetUser1 is null)
+                    {
+                        @Html.DisplayFor(modelItem => item.AspNetUser.Email)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.AspNetUser1.Email)
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    }
+</table>
